@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5">
+<meta name="theme-color" content="#1e40af">
+
+<!-- CSP: разрешаем CDN для библиотек, остальное — self -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' 'unsafe-inline' https://cdn.plot.ly https://cdn.jsdelivr.net;
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+               font-src 'self' https://fonts.gstatic.com;
+               img-src 'self' data: blob:;
+               connect-src 'self' https://cdn.plot.ly https://cdn.jsdelivr.net;
+               frame-ancestors 'none';
+               base-uri 'self'">
+
+<title>Выработка ЭЭ по регионам РФ · v6.0</title>
+
+<!-- Open Graph -->
+<meta property="og:title" content="Выработка ЭЭ по регионам РФ · v6.0">
+<meta property="og:description" content="Аналитическая платформа для работы с выработкой электроэнергии по регионам РФ. 14 разделов анализа, 12 форматов экспорта, терминал.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://glubkov2020-netizen.github.io/Project-AVE-MARIA-/">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Favicon (SVG data-URI) -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%231e40af'/%3E%3Cstop offset='1' stop-color='%230891b2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Ctext x='32' y='44' font-family='Inter,sans-serif' font-size='36' font-weight='900' text-anchor='middle' fill='white'%3E%D0%AD%3C/text%3E%3C/svg%3E">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Styles -->
+<link rel="stylesheet" href="styles/tokens.css">
+<link rel="stylesheet" href="styles/base.css">
+<link rel="stylesheet" href="styles/components.css">
+<link rel="stylesheet" href="styles/layout.css">
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash" role="status" aria-live="polite">
+  <div class="sp-inner">
+    <div class="sp-logo" aria-hidden="true">Э</div>
+    <h1>Выработка ЭЭ · РФ</h1>
+    <p class="sp-sub">Аналитическая платформа · v6.0</p>
+    <div class="sp-progress"><div class="sp-bar"></div></div>
+    <button class="sp-skip" id="spSkip" type="button">Пропустить →</button>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- ==================== SIDEBAR ==================== -->
+  <aside class="side" id="side" aria-label="Основная навигация">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">Э</div>
+      <div class="brand-text">
+        <h1>Выработка ЭЭ · РФ</h1>
+        <span class="sub">v6.0 · аналитика</span>
+      </div>
+      <button class="side-toggle icon-btn" id="sideToggle" aria-label="Свернуть меню" title="Свернуть (Ctrl+B)">
+        <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-title">Данные</div>
+      <nav class="nav">
+        <a href="#/data" data-route="data" class="active"><span class="dot"></span><span class="label">Ввод</span></a>
+        <a href="#/health" data-route="health"><span class="dot"></span><span class="label">Паспорт</span></a>
+        <a href="#/deepseek" data-route="deepseek"><span class="dot"></span><span class="label">DeepSeek</span></a>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-title">Анализ</div>
+      <nav class="nav">
+        <a href="#/view" data-route="view"><span class="dot"></span><span class="label">Графики</span></a>
+        <a href="#/compare" data-route="compare"><span class="dot"></span><span class="label">Сравнение</span></a>
+        <a href="#/stats" data-route="stats"><span class="dot"></span><span class="label">Расчёты</span></a>
+        <a href="#/trend" data-route="trend"><span class="dot"></span><span class="label">Тренды</span></a>
+        <a href="#/advanced" data-route="advanced"><span class="dot"></span><span class="label">Продвинутая</span></a>
+        <a href="#/structure" data-route="structure"><span class="dot"></span><span class="label">Структура</span></a>
+        <a href="#/anomaly" data-route="anomaly"><span class="dot"></span><span class="label">Аномалии</span></a>
+        <a href="#/heatmap" data-route="heatmap"><span class="dot"></span><span class="label">Тепловые карты</span></a>
+        <a href="#/region" data-route="region"><span class="dot"></span><span class="label">Паспорт региона</span></a>
+        <a href="#/scenario" data-route="scenario"><span class="dot"></span><span class="label">Сценарии</span></a>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-title">Отчёт</div>
+      <nav class="nav">
+        <a href="#/official" data-route="official"><span class="dot"></span><span class="label">Оформление</span></a>
+        <a href="#/export" data-route="export"><span class="dot"></span><span class="label">Экспорт</span></a>
+        <a href="#/settings" data-route="settings"><span class="dot"></span><span class="label">Настройки</span></a>
+      </nav>
+    </div>
+
+    <div class="nav-group">
+      <div class="group-title">Справка</div>
+      <nav class="nav">
+        <a href="docs.html" target="_blank" rel="noopener"><span class="dot"></span><span class="label">Документация ↗</span></a>
+        <a href="docs.html#sources" target="_blank" rel="noopener"><span class="dot"></span><span class="label">Источники ↗</span></a>
+        <a href="docs.html#methodology" target="_blank" rel="noopener"><span class="dot"></span><span class="label">Методика ↗</span></a>
+      </nav>
+    </div>
+
+    <div class="history-bar">
+      <button id="btnUndo" class="icon-btn" title="Отменить (Ctrl+Z)" aria-label="Отменить">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+      </button>
+      <button id="btnRedo" class="icon-btn" title="Повторить (Ctrl+Y)" aria-label="Повторить">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z"/></svg>
+      </button>
+      <span id="historyInfo" class="muted-text">0/0</span>
+    </div>
+
+    <div class="theme-switch" role="group" aria-label="Тема">
+      <button class="icon-btn" id="btnThemeLight" title="Светлая" aria-label="Светлая тема">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zM2 13h2v-2H2v2zm18 0h2v-2h-2v2zM11 2h2v2h-2V2zm0 18h2v2h-2v-2zM4.22 5.64l1.42-1.42 1.41 1.41-1.41 1.42-1.42-1.41zm12.73 12.72 1.42-1.41 1.41 1.41-1.41 1.42-1.42-1.42zM19.78 5.64l-1.42-1.42-1.41 1.41 1.41 1.42 1.42-1.41zM7.05 18.36l-1.42 1.41-1.41-1.41 1.41-1.42 1.42 1.42z"/></svg>
+      </button>
+      <button class="icon-btn" id="btnThemeDark" title="Тёмная" aria-label="Тёмная тема">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M12.3 22a10 10 0 0 1-9.9-11.5A8 8 0 0 0 20 12a7.9 7.9 0 0 0-.1-1.2A10 10 0 0 1 12.3 22z"/></svg>
+      </button>
+    </div>
+
+    <div class="side-footer">
+      Все расчёты в браузере.<br>
+      Автосохранение в localStorage.<br><br>
+      <a href="docs.html" target="_blank" rel="noopener">Документация</a> ·
+      <a href="docs.html#methodology" target="_blank" rel="noopener">Методика</a> ·
+      <a href="docs.html#license" target="_blank" rel="noopener">MIT</a>
+    </div>
+  </aside>
+
+  <!-- ==================== MAIN ==================== -->
+  <main id="main" role="main">
+
+    <div id="banner" class="banner" hidden></div>
+
+    <div class="page-head">
+      <div>
+        <h1 id="pageTitle">Аналитика выработки</h1>
+        <p class="lead" id="pageLead">Данные → качество → графики → аналитика → сценарии → отчёт.</p>
+      </div>
+      <div class="row">
+        <span class="pill"><span class="dot"></span><span id="statusText">Данных нет</span></span>
+        <button class="icon-btn" id="btnTour" title="Обучение (?)" aria-label="Обучение">?</button>
+        <button class="icon-btn" id="btnPalette" title="Палитра (Ctrl+K)" aria-label="Палитра команд">
+          <svg viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20 15.31 22.31 13 13 3.69 10.69 6l2.3 2.29L3 18.29V22h3.71l8.58-8.58L18.71 20H22v-4.69z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ============ KPI ============ -->
+    <div class="kpis" id="kpis" aria-live="polite"></div>
+
+    <!-- ============ ROUTED PAGES ============ -->
+    <div id="pages">
+
+      <!-- DATA -->
+      <section class="page" id="page-data" data-page="data">
+        <div class="card accent">
+          <div class="head"><h3>Регионы (мультивыбор)</h3><span class="hint">Новый регион — введите вручную в таблице</span></div>
+          <div class="chips" id="regionChips"></div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn btn-ghost" id="btnSelectAll" type="button">Все</button>
+            <button class="btn btn-ghost" id="btnClearSel" type="button">Снять</button>
+            <button class="btn btn-ghost" id="btnSelectWithData" type="button">Только с данными</button>
+            <button class="btn btn-primary" id="btnLoadSeed" type="button">Загрузить базу</button>
+            <button class="btn btn-ghost" id="btnLoadDemo" type="button">Демо</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="head"><h3>Ввод данных</h3><span class="hint">Единица: млрд кВт·ч · Годы 1990–2100</span></div>
+          <div class="grid-2">
+            <div>
+              <div class="hint" style="margin-bottom:6px">Таблица</div>
+              <div class="tbl-wrap">
+                <table id="dataTable" class="data-table">
+                  <thead><tr><th>Регион</th><th>Год</th><th>Значение</th><th>Статус</th><th>Примечание</th><th></th></tr></thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <div class="row" style="margin-top:8px">
+                <button class="btn btn-ghost" id="btnAddRow" type="button">+ Строка</button>
+                <button class="btn btn-danger" id="btnClearData" type="button">Очистить</button>
+              </div>
+            </div>
+            <div>
+              <label class="field" style="margin-bottom:6px">Вставка CSV / TSV / JSON
+                <textarea id="pasteArea" placeholder='Кемеровская обл.;2019;34.5;факт;Отчёт
+[{"region":"Москва","year":2019,"value":68.2}]'></textarea>
+              </label>
+              <div class="row" style="margin-top:8px">
+                <button class="btn btn-primary" id="btnPreviewPaste" type="button">Проверить и добавить</button>
+                <button class="btn btn-ghost" id="btnPickFile" type="button">Файл…</button>
+                <input type="file" id="fileInput" accept=".csv,.tsv,.txt,.json,.xlsx,.xls" hidden>
+              </div>
+              <div class="row" style="margin-top:8px">
+                <button class="btn btn-ghost" id="btnTplXlsx" type="button">Шаблон XLSX</button>
+                <button class="btn btn-ghost" id="btnTplCsv" type="button">Шаблон CSV</button>
+              </div>
+            </div>
+          </div>
+          <div id="dataMsg" class="msg" role="alert"></div>
+        </div>
+      </section>
+
+      <!-- HEALTH -->
+      <section class="page" id="page-health" data-page="health" hidden>
+        <div class="card accent">
+          <div class="head"><h3>Паспорт данных</h3></div>
+          <div class="health-grid" id="healthGrid"></div>
+        </div>
+        <div class="card"><div class="head"><h3>Матрица заполнения</h3></div><div id="healthMatrix" style="overflow-x:auto"></div></div>
+        <div class="card"><div class="head"><h3>Проблемы</h3></div><div id="healthIssues" class="tbl-wrap small"></div></div>
+      </section>
+
+      <!-- DEEPSEEK -->
+      <section class="page" id="page-deepseek" data-page="deepseek" hidden>
+        <div class="card accent">
+          <div class="head"><h3>Извлечение через DeepSeek</h3></div>
+          <p class="desc">Приложите документы в чат, вставьте промт, верните JSON в «Ввод».</p>
+          <div class="row" style="margin-bottom:12px">
+            <button class="btn btn-primary" id="btnOpenDS" type="button">Открыть DeepSeek →</button>
+            <button class="btn btn-ghost" id="btnCopyPrompt" type="button">📋 Копировать</button>
+          </div>
+          <div class="prompt-box"><pre id="promptText"></pre></div>
+        </div>
+      </section>
+
+      <!-- VIEW -->
+      <section class="page" id="page-view" data-page="view" hidden>
+        <div class="card">
+          <div class="head"><h3>Параметры</h3></div>
+          <div class="row">
+            <label class="inline">Тип:
+              <select id="chartType">
+                <option value="lines">Линия</option><option value="bar">Столбцы</option>
+                <option value="area">Область</option><option value="stack100">Структура</option>
+              </select>
+            </label>
+            <label class="inline">Y:
+              <select id="yScale"><option value="linear">Линейный</option><option value="log">Лог</option></select>
+            </label>
+            <label class="inline">Годы: <input type="number" id="yearMin" placeholder="от" style="width:76px"> <input type="number" id="yearMax" placeholder="до" style="width:76px"></label>
+            <button class="btn btn-primary" id="btnApplyView" type="button">Применить</button>
+          </div>
+          <div class="chips" id="regionChips2" style="margin-top:10px"></div>
+        </div>
+        <div class="card">
+          <div id="chart"></div>
+          <div class="figure-caption" id="figureCaption"></div>
+          <div class="figure-source" id="figureSource"></div>
+        </div>
+      </section>
+
+      <!-- COMPARE -->
+      <section class="page" id="page-compare" data-page="compare" hidden>
+        <div class="card"><div class="head"><h3>Нормированные индексы</h3><span class="hint">База=100</span></div><div id="compareChart"></div></div>
+        <div class="card"><div class="tbl-wrap small">
+          <table id="compareTable"><thead><tr><th>Регион</th><th class="num">База</th><th class="num">Первый</th><th class="num">Последний</th><th class="num">Прирост</th></tr></thead><tbody></tbody></table>
+        </div></div>
+      </section>
+
+      <!-- STATS -->
+      <section class="page" id="page-stats" data-page="stats" hidden>
+        <div class="card"><div class="head"><h3>Сводная</h3></div><div class="tbl-wrap small">
+          <table id="statsTable"><thead><tr>
+            <th>Регион</th><th class="num">N</th><th class="num">Σ</th><th class="num">Ср.</th><th class="num">Мед.</th>
+            <th class="num">σ</th><th class="num">CV%</th><th class="num">Min</th><th class="num">Max</th>
+            <th class="num">CAGR%</th><th class="num">Наклон</th><th class="num">R²</th><th class="num">Доля%</th>
+          </tr></thead><tbody></tbody></table>
+        </div></div>
+        <div class="card"><div class="head"><h3>Динамика по годам</h3></div><div class="tbl-wrap small">
+          <table id="yearTable"><thead><tr><th>Год</th><th class="num">Σ</th><th class="num">Абс.</th><th class="num">Цепной%</th><th class="num">Базис%</th><th class="num">MA(3)</th></tr></thead><tbody></tbody></table>
+        </div></div>
+        <div class="card">
+          <div class="head"><h3>Детально</h3><label class="inline">Регион: <select id="detailRegion"></select></label></div>
+          <div class="tbl-wrap small">
+            <table id="detailTable"><thead><tr><th>Год</th><th class="num">Значение</th><th class="num">Абс.</th><th class="num">Цепной%</th><th class="num">Базис%</th><th class="num">z</th><th>Флаг</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TREND -->
+      <section class="page" id="page-trend" data-page="trend" hidden>
+        <div class="card">
+          <div class="head"><h3>Тренды и прогноз</h3>
+            <div class="row">
+              <label class="inline">Горизонт: <select id="forecastYears"><option>1</option><option>2</option><option selected>3</option><option>5</option></select></label>
+              <button class="btn btn-primary" id="btnBuildTrend" type="button">Построить</button>
+            </div>
+          </div>
+          <p class="desc">Линейный, полином-2, экспонента — выбирается лучшая по R². Формулы — <a href="docs.html#methodology" target="_blank" rel="noopener">в методике</a>.</p>
+          <div id="trendChart"></div>
+        </div>
+        <div class="card"><div class="tbl-wrap small">
+          <table id="trendTable"><thead><tr><th>Регион</th><th>Модель</th><th class="num">R²</th><th class="num">MAPE%</th><th class="num">a</th><th class="num">b</th><th class="num">Y+1</th><th class="num">Y+2</th><th class="num">Y+3</th><th class="num">Y+5</th></tr></thead><tbody></tbody></table>
+        </div></div>
+      </section>
+
+      <!-- ADVANCED -->
+      <section class="page" id="page-advanced" data-page="advanced" hidden>
+        <div class="card accent">
+          <div class="head"><h3>Продвинутая аналитика</h3></div>
+          <div class="grid-3">
+            <div class="kpi"><div class="label">Джини</div><div class="val" id="advGini">—</div><div class="delta">неравенство</div></div>
+            <div class="kpi"><div class="label">CR-3</div><div class="val" id="advCR3">—</div><div class="delta">топ-3</div></div>
+            <div class="kpi"><div class="label">CR-5</div><div class="val" id="advCR5">—</div><div class="delta">топ-5</div></div>
+            <div class="kpi"><div class="label">Энтропия</div><div class="val" id="advEntropy">—</div><div class="delta">разнообразие</div></div>
+            <div class="kpi"><div class="label">Кластеры</div><div class="val" id="advClusters">—</div><div class="delta">k-means</div></div>
+            <div class="kpi"><div class="label">PCA</div><div class="val" id="advPCA">—</div><div class="delta">2 компоненты</div></div>
+          </div>
+        </div>
+        <div class="card"><h3>Кластеры + PCA</h3><div id="pcaChart"></div>
+          <div class="tbl-wrap small" style="margin-top:8px">
+            <table id="clusterTable"><thead><tr><th>Регион</th><th>Кластер</th><th class="num">PC1</th><th class="num">PC2</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div class="card"><h3>Радар</h3><div id="radarChart"></div></div>
+        <div class="card"><h3>Манн-Кендалл</h3>
+          <div class="tbl-wrap small">
+            <table id="mkTable"><thead><tr><th>Регион</th><th class="num">S</th><th class="num">Z</th><th class="num">p-value</th><th>Тренд</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div class="card"><h3>ACF</h3><div id="acfChart"></div></div>
+        <div class="card"><h3>Лаги</h3>
+          <div class="row" style="margin-bottom:8px">
+            <label class="inline">A: <select id="lagA"></select></label>
+            <label class="inline">B: <select id="lagB"></select></label>
+            <button class="btn btn-primary" id="btnBuildLag" type="button">Рассчитать</button>
+          </div>
+          <div id="lagChart"></div>
+        </div>
+      </section>
+
+      <!-- STRUCTURE -->
+      <section class="page" id="page-structure" data-page="structure" hidden>
+        <div class="card"><div id="structureChart"></div></div>
+        <div class="card"><div class="tbl-wrap small">
+          <table id="structureTable"><thead><tr><th>Год</th><th class="num">HHI</th><th>Интерпретация</th><th>Доли</th></tr></thead><tbody></tbody></table>
+        </div></div>
+      </section>
+
+      <!-- ANOMALY -->
+      <section class="page" id="page-anomaly" data-page="anomaly" hidden>
+        <div class="card"><h3>Аномалии: z-score + IQR + MAD</h3>
+          <div class="tbl-wrap small">
+            <table id="anomalyTable"><thead><tr><th>Регион</th><th>Год</th><th class="num">Значение</th><th class="num">z</th><th class="num">IQR</th><th class="num">MAD</th><th>Флаги</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+        <div class="card"><h3>Корреляции</h3><div id="corrTableWrap"></div></div>
+      </section>
+
+      <!-- HEATMAP -->
+      <section class="page" id="page-heatmap" data-page="heatmap" hidden>
+        <div class="card"><h3>Тепловая карта корреляций</h3><div id="heatmapChart"></div></div>
+        <div class="card"><h3>Матрица значений</h3><div id="matrixChart"></div></div>
+        <div class="card"><h3>Распределение</h3>
+          <div class="row"><label class="inline">Регион: <select id="histRegion"></select></label></div>
+          <div id="histChart"></div>
+        </div>
+        <div class="card"><h3>Водопад</h3><div id="waterfallChart"></div></div>
+        <div class="card"><h3>Box plot</h3><div id="boxChart"></div></div>
+      </section>
+
+      <!-- REGION PASSPORT -->
+      <section class="page" id="page-region" data-page="region" hidden>
+        <div class="card">
+          <div class="head"><h3>Паспорт региона</h3><label class="inline">Регион: <select id="passRegion"></select></label></div>
+          <div class="kpis" id="passKpis"></div>
+        </div>
+        <div class="card"><div id="passChart"></div></div>
+        <div class="card"><div class="tbl-wrap small">
+          <table id="passTable"><thead><tr><th>Год</th><th class="num">Значение</th><th class="num">Абс.</th><th class="num">Цепной%</th><th class="num">Базис%</th><th class="num">z</th><th>Статус</th><th>Примечание</th></tr></thead><tbody></tbody></table>
+        </div></div>
+      </section>
+
+      <!-- SCENARIO -->
+      <section class="page" id="page-scenario" data-page="scenario" hidden>
+        <div class="card">
+          <div class="head"><h3>Сценарии</h3></div>
+          <div class="row">
+            <label class="inline">Темп %/год: <input type="number" id="scenRate" value="3" step="0.5" style="width:96px"></label>
+            <label class="inline">Горизонт: <select id="scenYears"><option>3</option><option selected>5</option><option>10</option></select></label>
+            <button class="btn btn-primary" id="btnBuildScenario" type="button">Построить</button>
+          </div>
+          <div class="kpis" id="scenKpis" style="margin-top:10px"></div>
+        </div>
+        <div class="card"><div id="scenChart"></div></div>
+      </section>
+
+      <!-- OFFICIAL -->
+      <section class="page" id="page-official" data-page="official" hidden>
+        <div class="card">
+          <div class="grid-2">
+            <div>
+              <label class="field">Организация <input type="text" id="sigOrg"></label>
+              <label class="field" style="margin-top:8px">Заголовок <input type="text" id="figCaption" value="Выработка электроэнергии по регионам РФ, млрд кВт·ч"></label>
+              <label class="field" style="margin-top:8px">Источник <input type="text" id="figSource" value="Источник: расчёт по введённым данным"></label>
+            </div>
+            <div>
+              <label class="field">Составил <input type="text" id="sigAuthor"></label>
+              <label class="field" style="margin-top:8px">Дата <input type="date" id="sigDate"></label>
+              <label class="field" style="margin-top:8px">Примечание <input type="text" id="sigNote" value="Прогноз — линейная экстраполяция"></label>
+              <label class="field" style="margin-top:8px">Город <input type="text" id="sigCity" value="Москва"></label>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="figure-caption" id="figureCaption2"></div>
+          <div class="figure-source" id="figureSource2"></div>
+          <div class="sig-row">
+            <div>Организация: <span><b id="sigOrgOut">&nbsp;</b></span></div>
+            <div>Составил: <span><b id="sigAuthorOut">&nbsp;</b></span></div>
+            <div>Дата: <span><b id="sigDateOut">&nbsp;</b></span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page" id="page-settings" data-page="settings" hidden>
+        <div class="card">
+          <div class="head"><h3>Настройки</h3></div>
+          <div class="grid-3">
+            <label class="field">Единица <select id="optUnit"><option value="bln">млрд кВт·ч</option><option value="mln">млн кВт·ч</option><option value="twh">ТВт·ч</option></select></label>
+            <label class="field">Точность <select id="optPrec"><option value="0">0</option><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option></select></label>
+            <label class="field">Разделитель <select id="optSep"><option value="ru">запятая</option><option value="en">точка</option></select></label>
+            <label class="field">Тема <select id="optTheme"><option value="light">светлая</option><option value="dark">тёмная</option><option value="auto">авто</option></select></label>
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn btn-primary" id="btnSaveSettings" type="button">Сохранить</button>
+            <button class="btn btn-ghost" id="btnResetSettings" type="button">Сбросить</button>
+            <button class="btn btn-ghost" id="btnOpenConsent" type="button">🔒 Согласие и cookies</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="head"><h3>Проект</h3></div>
+          <p class="desc">Данные + регионы + настройки + оформление.</p>
+          <div class="row">
+            <button class="btn btn-primary" id="btnSaveProject" type="button">Скачать проект</button>
+            <button class="btn btn-ghost" id="btnLoadProject" type="button">Загрузить проект</button>
+            <input type="file" id="projFile" accept=".json" hidden>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPORT -->
+      <section class="page" id="page-export" data-page="export" hidden>
+        <div class="card">
+          <div class="head"><h3>Режим</h3></div>
+          <div class="export-modes">
+            <label><input type="radio" name="expMode" value="short" checked> Краткий</label>
+            <label><input type="radio" name="expMode" value="full"> Полный</label>
+          </div>
+          <div class="callout">PDF откроется в новом окне — Ctrl+P → «Сохранить как PDF». Формат отчёта — <a href="docs.html#methodology" target="_blank" rel="noopener">методика</a>.</div>
+        </div>
+        <div class="card">
+          <div class="head"><h3>Экспорт (12)</h3></div>
+          <div class="exp-grid">
+            <button class="btn btn-primary" data-exp="png" type="button">PNG</button>
+            <button class="btn" data-exp="jpeg" type="button">JPEG</button>
+            <button class="btn" data-exp="svg" type="button">SVG</button>
+            <button class="btn" data-exp="webp" type="button">WEBP</button>
+            <button class="btn" data-exp="pdf" type="button">PDF</button>
+            <button class="btn" data-exp="html" type="button">HTML</button>
+            <button class="btn" data-exp="csv" type="button">CSV</button>
+            <button class="btn" data-exp="xlsx" type="button">XLSX</button>
+            <button class="btn" data-exp="json" type="button">JSON</button>
+            <button class="btn" data-exp="docx" type="button">DOCX</button>
+            <button class="btn" data-exp="md" type="button">Markdown</button>
+            <button class="btn" data-exp="zip" type="button">ZIP</button>
+          </div>
+          <div id="expMsg" class="msg" role="alert"></div>
+        </div>
+        <div class="card">
+          <div class="head"><h3>Приложение — исходные данные</h3></div>
+          <div class="tbl-wrap small">
+            <table id="appendTable"><thead><tr><th>Регион</th><th>Год</th><th class="num">Значение</th><th>Статус</th><th>Примечание</th></tr></thead><tbody></tbody></table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- ==================== MOBILE NAV ==================== -->
+<nav class="mobile-nav" id="mobileNav" aria-label="Мобильная навигация">
+  <div class="nav-items">
+    <a href="#/data" data-route="data" class="active"><span class="ico">📝</span>Данные</a>
+    <a href="#/view" data-route="view"><span class="ico">📊</span>Графики</a>
+    <a href="#/stats" data-route="stats"><span class="ico">🧮</span>Расчёты</a>
+    <a href="#/export" data-route="export"><span class="ico">📤</span>Экспорт</a>
+    <a id="mobileMoreBtn" role="button" tabindex="0"><span class="ico">☰</span>Ещё</a>
+  </div>
+</nav>
+
+<div class="drawer-backdrop" id="drawerBackdrop" hidden>
+  <div class="drawer" role="dialog" aria-label="Полное меню">
+    <h3>Меню <button class="icon-btn" id="drawerClose" aria-label="Закрыть">✕</button></h3>
+    <div class="group-title">Данные</div>
+    <a href="#/data">📝 Ввод данных</a>
+    <a href="#/health">🩺 Паспорт данных</a>
+    <a href="#/deepseek">🤖 DeepSeek</a>
+    <div class="group-title">Анализ</div>
+    <a href="#/view">📊 Графики</a>
+    <a href="#/compare">📈 Сравнение</a>
+    <a href="#/stats">🧮 Расчёты</a>
+    <a href="#/trend">📉 Тренды</a>
+    <a href="#/advanced">🔬 Продвинутая</a>
+    <a href="#/structure">🥧 Структура</a>
+    <a href="#/anomaly">⚠️ Аномалии</a>
+    <a href="#/heatmap">🔥 Тепловые карты</a>
+    <a href="#/region">📍 Паспорт региона</a>
+    <a href="#/scenario">🎯 Сценарии</a>
+    <div class="group-title">Отчёт</div>
+    <a href="#/official">📋 Оформление</a>
+    <a href="#/export">📤 Экспорт</a>
+    <a href="#/settings">⚙️ Настройки</a>
+    <div class="group-title">Справка</div>
+    <a href="docs.html" target="_blank" rel="noopener">📘 Документация ↗</a>
+    <a href="docs.html#sources" target="_blank" rel="noopener">🔗 Источники ↗</a>
+    <a href="docs.html#methodology" target="_blank" rel="noopener">📐 Методика ↗</a>
+    <a href="docs.html#changelog" target="_blank" rel="noopener">📝 Changelog ↗</a>
+    <a href="docs.html#license" target="_blank" rel="noopener">⚖️ Лицензия ↗</a>
+    <a href="docs.html#privacy" target="_blank" rel="noopener">🔒 Политика ↗</a>
+    <div class="group-title">Быстрые действия</div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn btn-ghost" id="drawerThemeLight" style="flex:1">☀ Светлая</button>
+      <button class="btn btn-ghost" id="drawerThemeDark" style="flex:1">🌙 Тёмная</button>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn btn-ghost" id="drawerUndo" style="flex:1">↶ Undo</button>
+      <button class="btn btn-ghost" id="drawerRedo" style="flex:1">↷ Redo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== TERMINAL ==================== -->
+<button class="term-toggle" id="termToggle" title="Терминал (~)" aria-label="Терминал">⌘</button>
+<div class="terminal" id="terminal" role="dialog" aria-label="Терминал" hidden>
+  <div class="term-tabs">
+    <button data-tab="log" class="active">Журнал</button>
+    <button data-tab="err">Ошибки</button>
+    <button data-tab="warn">Предупреждения</button>
+    <button data-tab="data">Данные</button>
+    <button data-tab="cmd">Команды</button>
+    <button data-tab="help">Справка</button>
+    <span class="spacer"></span>
+    <button class="term-close icon-btn" id="termClose" aria-label="Закрыть">✕</button>
+  </div>
+  <div class="term-body" id="termBody">
+    <div class="term-tab-panel active" data-panel="log" id="panelLog"></div>
+    <div class="term-tab-panel" data-panel="err" id="panelErr"></div>
+    <div class="term-tab-panel" data-panel="warn" id="panelWarn"></div>
+    <div class="term-tab-panel" data-panel="data" id="panelData"></div>
+    <div class="term-tab-panel" data-panel="cmd" id="panelCmd"></div>
+    <div class="term-tab-panel" data-panel="help" id="panelHelp"></div>
+  </div>
+  <div class="term-quick">
+    <button data-cmd="help">help</button>
+    <button data-cmd="load demo">load demo</button>
+    <button data-cmd="stats">stats</button>
+    <button data-cmd="schema">schema</button>
+    <button data-cmd="missing">missing</button>
+    <button data-cmd="outliers">outliers</button>
+    <button data-cmd="export pdf">export pdf</button>
+    <button data-cmd="check libs">check libs</button>
+  </div>
+  <div class="term-input">
+    <span class="prompt">$</span>
+    <input type="text" id="termInput" placeholder="help — список (Tab — автодополнение)" autocomplete="off" spellcheck="false">
+  </div>
+</div>
+
+<!-- ==================== PALETTE ==================== -->
+<div class="palette-backdrop" id="paletteBackdrop" hidden></div>
+<div class="palette" id="palette" role="dialog" aria-label="Палитра команд" hidden>
+  <input type="text" id="paletteInput" placeholder="Поиск команды… (Esc — закрыть)">
+  <div class="results" id="paletteResults"></div>
+</div>
+
+<!-- ==================== ONBOARDING ==================== -->
+<div class="onb-backdrop" id="onbBackdrop" hidden></div>
+<div class="onb" id="onb" role="dialog" aria-labelledby="onbTitle" hidden>
+  <h2 id="onbTitle">👋 Добро пожаловать</h2>
+  <p>Аналитическая платформа для работы с выработкой электроэнергии по регионам РФ.</p>
+  <ul>
+    <li><b>Данные</b> — ввод, CSV/JSON, файлы, база.</li>
+    <li><b>Паспорт</b> — проверка качества.</li>
+    <li><b>Терминал</b> — кнопка ⌘ внизу справа или <b>~</b>.</li>
+    <li><b>Палитра</b> — <b>Ctrl+K</b>.</li>
+    <li><b>Документация</b> — ссылки в разделе «Справка».</li>
+  </ul>
+  <div class="actions">
+    <a href="docs.html" target="_blank" rel="noopener" class="btn btn-ghost">Документация ↗</a>
+    <button class="btn btn-ghost" id="onbSkip" type="button">Пропустить</button>
+    <button class="btn btn-primary" id="onbStart" type="button">Начать с демо</button>
+  </div>
+</div>
+
+<!-- ==================== CONSENT ==================== -->
+<div class="consent" id="consent" role="dialog" aria-labelledby="consentTitle" hidden>
+  <h3 id="consentTitle">🔒 Согласие на cookies и localStorage</h3>
+  <p>Платформа работает полностью в браузере. Мы используем localStorage для автосохранения данных и настроек. Персональные данные не собираются. Отозвать — в «Настройках». Подробнее — <a href="docs.html#privacy" target="_blank" rel="noopener">Политика конфиденциальности</a>.</p>
+  <div class="actions">
+    <button class="btn btn-primary" id="consentAccept" type="button">Принять</button>
+    <button class="btn btn-ghost" id="consentNecessary" type="button">Только необходимые</button>
+  </div>
+</div>
+
+<!-- ==================== UTIL ==================== -->
+<div id="exportStage" aria-hidden="true"></div>
+<div id="toasts" aria-live="polite"></div>
+<div id="tooltip" role="tooltip" hidden></div>
+
+<!-- ==================== SCRIPTS ==================== -->
+<!-- SEED_DATA (data.js не трогаю, грузится как раньше) -->
+<script src="data.js" onerror="window.__noSeedFile=true"></script>
+
+<!-- Модули: порядок важен -->
+<script src="js/state.js"></script>
+<script src="js/router.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/terminal.js"></script>
+<script src="js/palette.js"></script>
+<script src="js/export.js"></script>
+<script src="js/app.js"></script>
+
+<!-- CDN (defer, чтобы не блокировали старт) -->
+<script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

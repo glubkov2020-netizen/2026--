@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Документация · Выработка ЭЭ по регионам РФ</title>
+<style>
+  :root{
+    --bg:#fafaf8; --paper:#fff; --ink:#0a0f1a; --ink-soft:#475569; --muted:#64748b;
+    --rule:#e7e8ec; --rule-soft:#eef0f3; --accent:#1e40af; --accent-soft:rgba(30,64,175,.08);
+    --code-bg:#0f172a; --code-fg:#cbd5e1;
+    --font-ui:"Inter","Segoe UI",system-ui,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+    --font-doc:"Times New Roman",Georgia,serif;
+  }
+  html[data-theme="dark"]{
+    --bg:#0b0f19; --paper:#131826; --ink:#e6eaf2; --ink-soft:#b0b8c8; --muted:#8892a4;
+    --rule:#232a3b; --rule-soft:#1a2030; --accent:#5b8def; --accent-soft:rgba(91,141,239,.15);
+    --code-bg:#050810; --code-fg:#b9c3d6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.65;-webkit-text-size-adjust:100%}
+  .topbar{position:sticky;top:0;z-index:10;background:var(--paper);border-bottom:1px solid var(--rule);padding:12px 24px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .topbar .brand{display:flex;gap:10px;align-items:center}
+  .topbar .logo{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#1e40af,#0891b2);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .topbar .title{font-size:13px;font-weight:600}
+  .topbar .sub{font-size:11px;color:var(--muted)}
+  .topbar .nav{display:flex;gap:4px;flex-wrap:wrap;font-size:12px}
+  .topbar .nav a{padding:6px 12px;border-radius:6px;color:var(--ink-soft);text-decoration:none;border:1px solid transparent}
+  .topbar .nav a:hover{background:var(--accent-soft);color:var(--accent)}
+  .topbar .nav a.active{background:var(--accent);color:#fff}
+  .topbar .theme-btn{background:transparent;border:1px solid var(--rule);border-radius:6px;width:32px;height:32px;cursor:pointer;color:var(--ink-soft);font-size:14px}
+  .layout{display:grid;grid-template-columns:220px 1fr;max-width:1200px;margin:0 auto;gap:32px;padding:32px 24px 80px}
+  .toc{position:sticky;top:80px;align-self:start;max-height:calc(100vh - 100px);overflow-y:auto;font-size:13px}
+  .toc h3{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule);font-weight:600}
+  .toc a{display:block;padding:5px 10px;border-radius:6px;color:var(--ink-soft);text-decoration:none;margin-bottom:2px;font-size:13px}
+  .toc a:hover{background:var(--accent-soft);color:var(--accent)}
+  .toc a.active{background:var(--accent-soft);color:var(--accent);font-weight:600}
+  .paper{background:var(--paper);border:1px solid var(--rule);border-radius:16px;padding:40px 44px;box-shadow:0 1px 3px rgba(10,15,26,.04);max-width:860px}
+  .paper .doc-head{padding-bottom:16px;margin-bottom:28px;border-bottom:2px solid var(--ink)}
+  .paper .doc-head .stamp{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px}
+  .paper .doc-head h1{font-size:26px;margin:0 0 8px;line-height:1.25;letter-spacing:-.02em}
+  .paper .doc-head .meta{font-size:12px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+  section.doc-section{display:none;margin-bottom:32px;scroll-margin-top:80px}
+  section.doc-section.active{display:block}
+  .paper h2{font-size:20px;margin:22px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+  .paper h3{font-size:15px;margin:18px 0 10px}
+  .paper p{color:var(--ink-soft);margin:8px 0;font-size:14px;line-height:1.7}
+  .paper ul,.paper ol{color:var(--ink-soft);padding-left:22px;font-size:14px;line-height:1.7}
+  .paper li{margin:4px 0}
+  .paper code{background:var(--accent-soft);color:var(--accent);padding:1px 6px;border-radius:4px;font-family:var(--font-mono);font-size:.9em}
+  .paper pre{background:var(--code-bg);color:var(--code-fg);padding:14px 18px;border-radius:8px;overflow:auto;font-family:var(--font-mono);font-size:12.5px;line-height:1.6}
+  .formula{background:var(--code-bg);color:var(--code-fg);padding:14px 18px;border-radius:8px;margin:12px 0;border-left:3px solid var(--accent);font-family:var(--font-mono);font-size:13px;line-height:1.7;overflow-x:auto}
+  .formula .label{display:block;color:#7fb1ff;font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;font-family:var(--font-ui)}
+  .callout{border-left:3px solid var(--accent);background:var(--accent-soft);padding:12px 16px;margin:14px 0;border-radius:0 6px 6px 0;font-size:14px;color:var(--ink-soft);line-height:1.65}
+  .callout.warn{border-left-color:#d97706;background:rgba(217,119,6,.08)}
+  .callout.ok{border-left-color:#059669;background:rgba(5,150,105,.08)}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13px}
+  th,td{border:1px solid var(--rule);padding:8px 12px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft);font-weight:600;font-size:12px}
+  @media(max-width:900px){.layout{grid-template-columns:1fr;gap:16px;padding:20px 16px 60px}.toc{position:static;max-height:none;display:flex;flex-wrap:wrap;gap:4px}.toc h3{display:none}.toc a{flex:0 0 auto;padding:6px 10px;border:1px solid var(--rule)}.paper{padding:24px 20px}}
+  @media print{.topbar,.toc{display:none}.layout{display:block;padding:0;max-width:none}.paper{border:none;box-shadow:none;padding:0}.paper h1{page-break-after:avoid}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">Э</div>
+    <div>
+      <div class="title">Выработка ЭЭ · РФ</div>
+      <div class="sub">Документация · v6.0</div>
+    </div>
+  </div>
+  <nav class="nav">
+    <a href="index.html">← Платформа</a>
+    <a href="#docs" class="active">Документация</a>
+    <a href="#sources">Источники</a>
+    <a href="#methodology">Методика</a>
+    <a href="#changelog">Changelog</a>
+    <a href="#license">Лицензия</a>
+    <a href="#privacy">Политика</a>
+  </nav>
+  <button class="theme-btn" id="themeBtn" aria-label="Тема">🌙</button>
+</header>
+
+<div class="layout">
+  <aside class="toc">
+    <h3>Содержание</h3>
+    <a href="#docs" class="active" data-sec="docs">📘 Документация</a>
+    <a href="#sources" data-sec="sources">🔗 Источники</a>
+    <a href="#methodology" data-sec="methodology">📐 Методика</a>
+    <a href="#changelog" data-sec="changelog">📝 Changelog</a>
+    <a href="#license" data-sec="license">⚖️ Лицензия</a>
+    <a href="#privacy" data-sec="privacy">🔒 Политика</a>
+  </aside>
+
+  <main class="paper">
+    <div class="doc-head">
+      <div class="stamp">Официальный документ · v6.0 · 2026</div>
+      <h1>Документация платформы</h1>
+      <div class="meta">
+        <span><b>Проект:</b> AVE MARIA</span>
+        <span><b>Лицензия:</b> MIT</span>
+        <span><b>Стек:</b> Vanilla JS + Plotly + SheetJS + docx + JSZip</span>
+      </div>
+    </div>
+
+    <!-- ДОКУМЕНТАЦИЯ -->
+    <section class="doc-section active" id="docs-sec">
+      <h2>Руководство пользователя</h2>
+      <h3>1. Быстрый старт</h3>
+      <p>Три способа загрузить данные:</p>
+      <ul>
+        <li><b>Кнопка «Загрузить базу»</b> — если рядом с index.html лежит data.js.</li>
+        <li><b>Кнопка «Демо»</b> — синтетические данные 10×10.</li>
+        <li><b>Вручную или CSV/JSON</b> — вставьте в поле, нажмите «Проверить и добавить».</li>
+      </ul>
+
+      <h3>2. Форматы данных</h3>
+      <p>CSV (разделитель <code>;</code> или <code>,</code>):</p>
+      <pre>Регион;Год;Значение;Статус;Примечание
+Кемеровская обл.;2019;34.5;факт;Отчёт Минэнерго 2019
+Москва;2019;68.2;факт;Мосэнерго</pre>
+      <p>JSON:</p>
+      <pre>[{"region":"Кемеровская обл.","year":2019,"value":34.5,"status":"факт","note":"Отчёт"}]</pre>
+
+      <h3>3. Разделы</h3>
+      <table>
+        <thead><tr><th>Раздел</th><th>Назначение</th></tr></thead>
+        <tbody>
+          <tr><td>Ввод</td><td>Таблица, CSV/JSON, файл, шаблоны</td></tr>
+          <tr><td>Паспорт</td><td>Проверка качества: пропуски, скачки, дубли</td></tr>
+          <tr><td>Графики</td><td>Линия / столбцы / область / структура</td></tr>
+          <tr><td>Сравнение</td><td>Нормированные индексы (база=100)</td></tr>
+          <tr><td>Расчёты</td><td>Среднее, медиана, σ, CV, CAGR, доля</td></tr>
+          <tr><td>Тренды</td><td>Линейный / полином-2 / экспонента, прогноз</td></tr>
+          <tr><td>Продвинутая</td><td>Джини, HHI, k-means, PCA, Манн-Кендалл</td></tr>
+          <tr><td>Структура</td><td>HHI и доли регионов</td></tr>
+          <tr><td>Аномалии</td><td>z-score, IQR, MAD, корреляции</td></tr>
+          <tr><td>Тепловые карты</td><td>Heatmap, гистограмма, водопад, box plot</td></tr>
+          <tr><td>Паспорт региона</td><td>Все метрики по одному региону</td></tr>
+          <tr><td>Сценарии</td><td>«+X% в год» с горизонтом</td></tr>
+          <tr><td>Оформление</td><td>Реквизиты отчёта</td></tr>
+          <tr><td>Экспорт</td><td>12 форматов</td></tr>
+          <tr><td>Настройки</td><td>Единица, точность, тема, проект</td></tr>
+        </tbody>
+      </table>
+
+      <h3>4. Горячие клавиши</h3>
+      <ul>
+        <li><code>~</code> — терминал</li>
+        <li><code>Ctrl+K</code> — палитра команд</li>
+        <li><code>Ctrl+B</code> — свернуть сайдбар</li>
+        <li><code>Ctrl+Z / Ctrl+Y</code> — undo/redo</li>
+        <li><code>↑ / ↓</code> — история команд</li>
+        <li><code>Tab</code> — автодополнение</li>
+        <li><code>Esc</code> — закрыть модалку</li>
+      </ul>
+    </section>
+
+    <!-- ИСТОЧНИКИ -->
+    <section class="doc-section" id="sources-sec">
+      <h2>Источники данных</h2>
+      <p>Платформа <b>не поставляет</b> данные. Пользователь вводит их сам из официальных источников:</p>
+      <ul>
+        <li><a href="https://minenergo.gov.ru/activity/statistic" target="_blank" rel="noopener">Минэнерго России</a> — отчёты, СиПР</li>
+        <li><a href="https://rosstat.gov.ru/enterprise_electric" target="_blank" rel="noopener">Росстат</a> — ТЭБ, региональная статистика</li>
+        <li><a href="https://www.so-ups.ru/functioning/ees/" target="_blank" rel="noopener">СО ЕЭС</a> — отчёты ЕЭС</li>
+        <li><a href="https://www.atsenergo.ru/" target="_blank" rel="noopener">АТС</a> — оптовый рынок</li>
+        <li><a href="https://data.gov.ru/" target="_blank" rel="noopener">data.gov.ru</a> — открытые наборы</li>
+      </ul>
+      <div class="callout warn">
+        <b>Важно.</b> Seed-база data.js содержит <b>оценочные</b> значения. Для официальных отчётов — только первичные источники.
+      </div>
+    </section>
+
+    <!-- МЕТОДИКА -->
+    <section class="doc-section" id="methodology-sec">
+      <h2>Методика расчётов</h2>
+
+      <h3>Описательные статистики</h3>
+      <div class="formula"><span class="label">Среднее</span>x̄ = (Σ xᵢ) / n</div>
+      <div class="formula"><span class="label">Медиана</span>нечётное n: x₍ₙ₊₁₎/₂; чётное: (x₍ₙ/₂₎+x₍ₙ/₂₊₁₎)/2</div>
+      <div class="formula"><span class="label">σ (выборочное)</span>σ = √[Σ(xᵢ−x̄)²/(n−1)]</div>
+      <div class="formula"><span class="label">CV</span>CV = (σ/x̄)·100%</div>
+      <div class="formula"><span class="label">CAGR</span>CAGR = [(x_кон/x_нач)^(1/n)−1]·100%</div>
+
+      <h3>Тренды</h3>
+      <div class="formula"><span class="label">МНК</span>ŷ = a + b·t; b = Σ(tᵢ−t̄)(yᵢ−ȳ)/Σ(tᵢ−t̄)²; a = ȳ−b·t̄</div>
+      <div class="formula"><span class="label">Полином-2</span>ŷ = a₀ + a₁·t + a₂·t² (с центрированием t)</div>
+      <div class="formula"><span class="label">Экспонента</span>ŷ = a·e^(b·t) (МНК к ln y)</div>
+      <div class="formula"><span class="label">R²</span>R² = 1 − SS_res/SS_tot (null при SS_tot=0)</div>
+      <div class="formula"><span class="label">MAPE</span>MAPE = (100/n)·Σ|(yᵢ−ŷᵢ)/yᵢ| (null при >30% нулей)</div>
+
+      <h3>Аномалии</h3>
+      <div class="formula"><span class="label">z-score</span>z = (x−x̄)/σ; |z|&gt;2 — выброс</div>
+      <div class="formula"><span class="label">IQR</span>Q1, Q3; IQR=Q3−Q1; выброс x&lt;Q1−1.5·IQR или x&gt;Q3+1.5·IQR</div>
+      <div class="formula"><span class="label">MAD (scaled)</span>MAD=median(|xᵢ−median(x)|); scaled=1.4826·MAD; выброс |xᵢ−median|&gt;3·scaled</div>
+
+      <h3>Структура</h3>
+      <div class="formula"><span class="label">HHI</span>HHI = Σ sᵢ², sᵢ — доля в %</div>
+      <div class="formula"><span class="label">Джини</span>G = Σᵢ(2i−n−1)·x₍ᵢ₎/(n·Σx)</div>
+      <div class="formula"><span class="label">CR-k</span>CR_k = (Σ топ-k / Σ всех)·100%</div>
+      <div class="formula"><span class="label">Энтропия</span>H = −Σpᵢ·ln(pᵢ)</div>
+
+      <h3>Корреляции</h3>
+      <div class="formula"><span class="label">Пирсон</span>r = Σ(xᵢ−x̄)(yᵢ−ȳ)/√[Σ(xᵢ−x̄)²·Σ(yᵢ−ȳ)²]</div>
+      <div class="formula"><span class="label">Манн-Кендалл</span>S = Σᵢ Σⱼ₌ᵢ₊₁ sign(xⱼ−xᵢ); Var(S) с поправкой на ties; Z = (S−sign(S))/√Var(S)</div>
+
+      <h3>Кластеризация</h3>
+      <div class="formula"><span class="label">k-means++</span>Инициализация k-means++, 10 запусков, лучший по inertia</div>
+      <div class="formula"><span class="label">PCA</span>Степенной метод, maxIter=1000, tolerance=1e-10</div>
+    </section>
+
+    <!-- CHANGELOG -->
+    <section class="doc-section" id="changelog-sec">
+      <h2>История версий</h2>
+
+      <h3>6.0 — 2026</h3>
+      <ul>
+        <li>Разбиение монолита на модули (state, router, ui, stats, data, charts, terminal, palette, export, app).</li>
+        <li>Hash-роутер с поддержкой кнопки «Назад».</li>
+        <li>Централизованный state + pub/sub.</li>
+        <li>Новая дизайн-система: токены, отдельная тёмная палитра (Linear-style), компоненты.</li>
+        <li>Единый docs.html с 6 разделами и роутингом по #hash.</li>
+        <li>Исправлены формулы: R²=null при константе, полином с центрированием, k-means++, MAD-scaled, Манн-Кендалл с ties.</li>
+        <li>XSS-защита: все innerHTML с пользовательскими данными через esc().</li>
+        <li>CSP-мета, Open Graph, SVG-фавикон.</li>
+        <li>Мобильная адаптация: инпуты 16px, кнопки ≥44px, safe-area-inset.</li>
+      </ul>
+
+      <h3>5.1 — 2025</h3>
+      <ul>
+        <li>Ссылки на отдельные документы (docs, sources, methodology, changelog, license, privacy).</li>
+        <li>Обновлена документация, добавлена связь с ВИЭ.</li>
+      </ul>
+
+      <h3>5.0 — 2025</h3>
+      <ul>
+        <li>Заставка, согласие на cookies, страница «О программе».</li>
+        <li>Терминал с 40 командами.</li>
+        <li>Продвинутая аналитика: k-means, PCA, Манн-Кендалл, Джини, CR-3/CR-5, энтропия.</li>
+      </ul>
+    </section>
+
+    <!-- ЛИЦЕНЗИЯ -->
+    <section class="doc-section" id="license-sec">
+      <h2>Лицензия MIT</h2>
+      <p>Copyright © 2026, проект AVE MARIA.</p>
+      <p>Настоящим предоставляется бесплатное разрешение любому лицу, получившему копию данного программного обеспечения и сопутствующих файлов документации (далее — «Программное обеспечение»), использовать Программное обеспечение без ограничений, включая неограниченное право на использование, копирование, изменение, объединение, публикацию, распространение, сублицензирование и/или продажу копий Программного обеспечения, а также лицам, которым предоставляется данное Программное обеспечение, при соблюдении следующих условий:</p>
+      <p>Указанное выше уведомление об авторских правах и данное разрешение должны быть включены во все копии или значительные части Программного обеспечения.</p>
+      <div class="callout warn">
+        <b>Отказ от ответственности.</b> ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ ПРЕДОСТАВЛЯЕТСЯ «КАК ЕСТЬ», БЕЗ КАКИХ-ЛИБО ГАРАНТИЙ, ЯВНЫХ ИЛИ ПОДРАЗУМЕВАЕМЫХ. НИ В КОЕМ СЛУЧАЕ АВТОРЫ НЕ НЕСУТ ОТВЕТСТВЕННОСТИ ЗА ЛЮБЫЕ ПРЕТЕНЗИИ, УЩЕРБ ИЛИ ИНЫЕ ОБЯЗАТЕЛЬСТВА.
+      </div>
+      <h3>Сторонние библиотеки</h3>
+      <ul>
+        <li><b>Plotly.js</b> — MIT</li>
+        <li><b>SheetJS</b> — Apache 2.0</li>
+        <li><b>docx</b> — MIT</li>
+        <li><b>JSZip</b> — MIT/GPLv3</li>
+        <li><b>html2canvas</b> — MIT</li>
+      </ul>
+    </section>
+
+    <!-- ПОЛИТИКА -->
+    <section class="doc-section" id="privacy-sec">
+      <h2>Политика конфиденциальности</h2>
+      <div class="callout ok">
+        <b>Платформа не собирает персональные данные.</b> Все вычисления в браузере. Данные на сервер не отправляются.
+      </div>
+      <h3>Что хранится в localStorage</h3>
+      <ul>
+        <li>Введённые данные (для автосохранения)</li>
+        <li>Настройки (единица, точность, тема)</li>
+        <li>Флаг согласия</li>
+      </ul>
+      <h3>Управление</h3>
+      <ul>
+        <li>Принять — автосохранение включено</li>
+        <li>Только необходимые — автосохранение отключено</li>
+        <li>Отозвать — Настройки → «Согласие и cookies»</li>
+      </ul>
+      <h3>Cookie</h3>
+      <p>HTTP-cookies не используются. Всё — в localStorage, который подпадает под требования согласия.</p>
+    </section>
+  </main>
+</div>
+
+<script>
+(function(){
+  var sections = {
+    'docs': 'docs-sec',
+    'sources': 'sources-sec',
+    'methodology': 'methodology-sec',
+    'changelog': 'changelog-sec',
+    'license': 'license-sec',
+    'privacy': 'privacy-sec'
+  };
+
+  function show(sec){
+    if(!sections[sec]) sec = 'docs';
+    document.querySelectorAll('.doc-section').forEach(function(s){ s.classList.remove('active'); });
+    var target = document.getElementById(sections[sec]);
+    if(target) target.classList.add('active');
+    document.querySelectorAll('.toc a, .topbar .nav a').forEach(function(a){
+      var href = (a.getAttribute('href') || '').replace('#', '');
+      a.classList.toggle('active', href === sec);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function parseHash(){
+    return (location.hash || '').replace(/^#/, '') || 'docs';
+  }
+
+  window.addEventListener('hashchange', function(){ show(parseHash()); });
+  show(parseHash());
+
+  /* Тема из localStorage */
+  try {
+    var s = JSON.parse(localStorage.getItem('energy_platform_state') || '{}');
+    if(s.theme === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  } catch(e){}
+
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  });
+})();
+</script>
+</body>
+</html>

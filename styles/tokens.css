@@ -1,0 +1,140 @@
+/* ============================================================
+   DESIGN TOKENS
+   Светлая: тёплый фон #FAFAF8, surface #FFF
+   Тёмная: холодный сине-серый (Linear-style)
+   ============================================================ */
+
+:root {
+  /* ---------- ФОН И ПОВЕРХНОСТИ ---------- */
+  --bg: #fafaf8;
+  --bg-alt: #f4f4f0;
+  --surface: #ffffff;
+  --surface-2: #fbfbf7;
+  --surface-hover: #f4f4f0;
+  --surface-active: #ececE6;
+
+  /* ---------- ТЕКСТ ---------- */
+  --text: #0a0f1a;
+  --text-soft: #475569;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+
+  /* ---------- ГРАНИЦЫ ---------- */
+  --border: #e7e8ec;
+  --border-soft: #eef0f3;
+  --border-strong: #cbd5e1;
+
+  /* ---------- АКЦЕНТ ---------- */
+  --accent: #1e40af;
+  --accent-hover: #1d4ed8;
+  --accent-soft: rgba(30, 64, 175, 0.08);
+  --accent-soft-2: rgba(30, 64, 175, 0.04);
+  --accent-contrast: #ffffff;
+
+  /* ---------- СЕМАНТИКА ---------- */
+  --ok: #059669;
+  --ok-soft: rgba(5, 150, 105, 0.10);
+  --warn: #d97706;
+  --warn-soft: rgba(217, 119, 6, 0.10);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.10);
+  --info: #0891b2;
+  --info-soft: rgba(8, 145, 178, 0.10);
+
+  /* ---------- РАДИУСЫ ---------- */
+  --r-4: 4px;
+  --r-8: 8px;
+  --r-12: 12px;
+  --r-16: 16px;
+  --r-24: 24px;
+  --r-pill: 999px;
+
+  /* ---------- SPACING ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+
+  /* ---------- ТЕНИ ---------- */
+  --sh-xs: 0 1px 2px rgba(10, 15, 26, 0.04);
+  --sh-sm: 0 2px 8px rgba(10, 15, 26, 0.05);
+  --sh-md: 0 8px 24px rgba(10, 15, 26, 0.08);
+  --sh-lg: 0 16px 48px rgba(10, 15, 26, 0.12);
+  --sh-xl: 0 24px 64px rgba(10, 15, 26, 0.18);
+
+  /* ---------- Z-INDEX ---------- */
+  --z-side: 50;
+  --z-mobile-nav: 800;
+  --z-term-toggle: 850;
+  --z-terminal: 950;
+  --z-palette-back: 960;
+  --z-palette: 961;
+  --z-modal-back: 970;
+  --z-modal: 971;
+  --z-consent: 980;
+  --z-toast: 9990;
+  --z-tooltip: 9995;
+  --z-splash: 9999;
+
+  /* ---------- ТИПОГРАФИКА ---------- */
+  --font-ui: "Inter", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  /* ---------- МОБИЛЬНОЕ ---------- */
+  --touch: 44px;
+  --mobile-nav-h: 64px;
+
+  /* ---------- TERMINAL ---------- */
+  --term-bg: #0b1220;
+  --term-fg: #c9d1e0;
+  --term-border: #1c263a;
+}
+
+/* ============================================================
+   ТЁМНАЯ ТЕМА — не инверсия, отдельная палитра (Linear-style)
+   ============================================================ */
+html[data-theme="dark"] {
+  --bg: #0b0f19;
+  --bg-alt: #0e131f;
+  --surface: #131826;
+  --surface-2: #161c2b;
+  --surface-hover: #1a2131;
+  --surface-active: #232a3b;
+
+  --text: #e6eaf2;
+  --text-soft: #b0b8c8;
+  --text-muted: #8892a4;
+  --text-subtle: #5c6678;
+
+  --border: #232a3b;
+  --border-soft: #1a2030;
+  --border-strong: #344055;
+
+  --accent: #5b8def;
+  --accent-hover: #7ba3f3;
+  --accent-soft: rgba(91, 141, 239, 0.15);
+  --accent-soft-2: rgba(91, 141, 239, 0.08);
+  --accent-contrast: #ffffff;
+
+  --ok: #34d399;
+  --ok-soft: rgba(52, 211, 153, 0.14);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251, 191, 36, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.14);
+  --info: #22d3ee;
+  --info-soft: rgba(34, 211, 238, 0.14);
+
+  --sh-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --sh-md: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --sh-lg: 0 16px 48px rgba(0, 0, 0, 0.55);
+  --sh-xl: 0 24px 64px rgba(0, 0, 0, 0.65);
+
+  --term-bg: #050810;
+  --term-fg: #b9c3d6;
+  --term-border: #1a2438;
+}
